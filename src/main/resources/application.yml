@@ -34,3 +34,17 @@ spring:
 info:
   version: '@project.version@'
   stage: dev
+
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  admin-clients:
+    master:
+      client-id: admin-cli
+      username: admin
+      password: admin
+      pool-size: 2
+    TESTING:
+      client-id: user-service
+      username: actions-user
+      password: 123
+      pool-size: 2

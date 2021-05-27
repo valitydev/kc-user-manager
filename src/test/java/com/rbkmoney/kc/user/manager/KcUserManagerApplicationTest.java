@@ -1,14 +1,14 @@
-package com.rbkmoney.kcusermanager;
+package com.rbkmoney.kc.user.manager;
 
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = KcUserManagerApplication.class)
-public class KcUserManagerApplicationTest {
+class KcUserManagerApplicationTest {
 
     @Test
-    public void contextLoads() {
-
+    void contextLoads() {
+        System.out.println("It works!");
     }
 }

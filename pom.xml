@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>kc-user-manager</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>kc-user-manager</name>
@@ -24,6 +24,9 @@
         <management.port>8023</management.port>
         <exposed.ports>${server.port} ${management.port}</exposed.ports>
         <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
+        <keycloak.version>4.5.0.Final</keycloak.version>
+        <resteasy.version>3.15.1.Final</resteasy.version>
+        <kc.user.manager.proto.version>1.5-1db1d98</kc.user.manager.proto.version>
     </properties>
 
     <dependencies>
@@ -44,6 +47,11 @@
         <dependency>
             <groupId>com.rbkmoney</groupId>
             <artifactId>shared-resources</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>kc-user-manager-proto</artifactId>
+            <version>${kc.user.manager.proto.version}</version>
         </dependency>
 
         <!--spring-->
@@ -81,6 +89,22 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-admin-client</artifactId>
+            <version>${keycloak.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>${resteasy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>${resteasy.version}</version>
+        </dependency>
+
 
         <!--test-->
         <dependency>
