@@ -40,8 +40,6 @@ public class KeycloakUserManagerServlet extends GenericServlet {
                 .build(KeycloakUserManagerSrv.Iface.class, requestHandler);
     }
 
-
-
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         thriftServlet.service(req, res);

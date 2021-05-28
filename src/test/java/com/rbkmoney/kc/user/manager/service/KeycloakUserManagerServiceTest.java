@@ -77,14 +77,6 @@ class KeycloakUserManagerServiceTest {
 
     @Test
     void create() throws TException {
-        User user = new User();
-        UserID userID = new UserID();
-        userID.setEmail(EMAIL);
-        userID.setRealm(REALM);
-        user.setUserId(userID);
-        user.setFirstName(FIRST_NAME);
-        user.setLastName(LAST_NAME);
-
         mockAdminClientAndToken();
         mockRealmAndUsersResource();
 
@@ -94,6 +86,7 @@ class KeycloakUserManagerServiceTest {
                 .thenReturn(new ServerResponse(null, 201, headers))
                 .thenReturn(new ServerResponse(null, 409, null));
 
+        User user = createUser();
         CreateUserResponse createUserResponse = service.create(user);
         assertEquals(CREATED_USER_RESOURCE, createUserResponse.getStatus().getSuccess().getId());
         assertThrows(KeycloakUserManagerException.class, () -> service.create(user));
@@ -106,60 +99,37 @@ class KeycloakUserManagerServiceTest {
         mockAdminClientAndToken();
         mockRealmAndUsersResource();
 
-        UserRepresentation user = createUser(EMAIL);
+        UserRepresentation user = createUserRepresentation(EMAIL);
 
         List<UserRepresentation> noRequiredUserList = Arrays.asList(
-                createUser("stub_1"),
-                createUser("stub_2")
+                createUserRepresentation("stub_1"),
+                createUserRepresentation("stub_2")
         );
         List<UserRepresentation> withRequiredUserList = Arrays.asList(
                 user,
-                createUser("stub_1"),
-                createUser("stub_2")
+                createUserRepresentation("stub_1"),
+                createUserRepresentation("stub_2")
         );
 
-        when(usersResource.search(
-                null,
-                null,
-                null,
-                EMAIL,
-                null,
-                null,
-                true)
-        )
+        when(usersResource.search(null, null, null, EMAIL, null, null, true))
                 .thenReturn(new ArrayList<>())
                 .thenReturn(noRequiredUserList)
                 .thenReturn(withRequiredUserList);
 
         when(usersResource.get(user.getId())).thenReturn(userResource);
 
-        UserID userID = new UserID();
-        userID.setEmail(EMAIL);
-        userID.setRealm(REALM);
-        RedirectParams redirectParams = new RedirectParams();
-        redirectParams.setClientId(CLIENT_ID);
-        redirectParams.setRedirectUri(REDIRECT_URI);
-        EmailSendingRequest rq = new EmailSendingRequest();
-        rq.setUserId(userID);
+        EmailSendingRequest request = new EmailSendingRequest();
+        request.setUserId(createUserID());
 
-        assertThrows(KeycloakUserManagerException.class, () -> service.sendUpdatePasswordEmail(rq));
-        assertThrows(KeycloakUserManagerException.class, () -> service.sendUpdatePasswordEmail(rq));
-        service.sendUpdatePasswordEmail(rq);
-        rq.setRedirectParams(redirectParams);
-        service.sendUpdatePasswordEmail(rq);
+        assertThrows(KeycloakUserManagerException.class, () -> service.sendUpdatePasswordEmail(request));
+        assertThrows(KeycloakUserManagerException.class, () -> service.sendUpdatePasswordEmail(request));
+        service.sendUpdatePasswordEmail(request);
+        request.setRedirectParams(createRedirectParams());
+        service.sendUpdatePasswordEmail(request);
 
         verify(usersResource, times(4))
-                .search(
-                        null,
-                        null,
-                        null,
-                        EMAIL,
-                        null,
-                        null,
-                        true
-                );
-        verify(usersResource, times(2))
-                .get(user.getId());
+                .search(null, null, null, EMAIL, null, null, true);
+        verify(usersResource, times(2)).get(user.getId());
 
         ArgumentCaptor<String> clientIdCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> redirectUriCaptor = ArgumentCaptor.forClass(String.class);
@@ -188,61 +158,37 @@ class KeycloakUserManagerServiceTest {
         mockAdminClientAndToken();
         mockRealmAndUsersResource();
 
-        UserRepresentation user = createUser(EMAIL);
+        UserRepresentation user = createUserRepresentation(EMAIL);
 
         List<UserRepresentation> noRequiredUserList = Arrays.asList(
-                createUser("stub_1"),
-                createUser("stub_2")
+                createUserRepresentation("stub_1"),
+                createUserRepresentation("stub_2")
         );
         List<UserRepresentation> withRequiredUserList = Arrays.asList(
                 user,
-                createUser("stub_1"),
-                createUser("stub_2")
+                createUserRepresentation("stub_1"),
+                createUserRepresentation("stub_2")
         );
 
-        when(usersResource.search(
-                null,
-                null,
-                null,
-                EMAIL,
-                null,
-                null,
-                true)
-        )
+        when(usersResource.search(null, null, null, EMAIL, null, null, true))
                 .thenReturn(new ArrayList<>())
                 .thenReturn(noRequiredUserList)
                 .thenReturn(withRequiredUserList);
 
         when(usersResource.get(user.getId())).thenReturn(userResource);
 
-        UserID userID = new UserID();
-        userID.setEmail(EMAIL);
-        userID.setRealm(REALM);
+        EmailSendingRequest request = new EmailSendingRequest();
+        request.setUserId(createUserID());
 
-        RedirectParams redirectParams = new RedirectParams();
-        redirectParams.setClientId(CLIENT_ID);
-        redirectParams.setRedirectUri(REDIRECT_URI);
-        EmailSendingRequest rq = new EmailSendingRequest();
-        rq.setUserId(userID);
-
-        assertThrows(KeycloakUserManagerException.class, () -> service.sendVerifyUserEmail(rq));
-        assertThrows(KeycloakUserManagerException.class, () -> service.sendVerifyUserEmail(rq));
-        service.sendVerifyUserEmail(rq);
-        rq.setRedirectParams(redirectParams);
-        service.sendVerifyUserEmail(rq);
+        assertThrows(KeycloakUserManagerException.class, () -> service.sendVerifyUserEmail(request));
+        assertThrows(KeycloakUserManagerException.class, () -> service.sendVerifyUserEmail(request));
+        service.sendVerifyUserEmail(request);
+        request.setRedirectParams(createRedirectParams());
+        service.sendVerifyUserEmail(request);
 
         verify(usersResource, times(4))
-                .search(
-                        null,
-                        null,
-                        null,
-                        EMAIL,
-                        null,
-                        null,
-                        true
-                );
-        verify(usersResource, times(2))
-                .get(user.getId());
+                .search(null, null, null, EMAIL, null, null, true);
+        verify(usersResource, times(2)).get(user.getId());
 
         ArgumentCaptor<String> clientIdCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> redirectUriCaptor = ArgumentCaptor.forClass(String.class);
@@ -277,7 +223,7 @@ class KeycloakUserManagerServiceTest {
         when(realmResource.users()).thenReturn(usersResource);
     }
 
-    private UserRepresentation createUser(String email) {
+    private UserRepresentation createUserRepresentation(String email) {
         UserRepresentation userRepresentation = new UserRepresentation();
         userRepresentation.setId(UUID.randomUUID().toString());
         userRepresentation.setEmail(email);
@@ -285,5 +231,30 @@ class KeycloakUserManagerServiceTest {
         userRepresentation.setEmailVerified(true);
 
         return userRepresentation;
+    }
+
+    private UserID createUserID() {
+        UserID userID = new UserID();
+        userID.setEmail(EMAIL);
+        userID.setRealm(REALM);
+
+        return userID;
+    }
+
+    private User createUser() {
+        User user = new User();
+        user.setUserId(createUserID());
+        user.setFirstName(FIRST_NAME);
+        user.setLastName(LAST_NAME);
+
+        return user;
+    }
+
+    private RedirectParams createRedirectParams() {
+        RedirectParams redirectParams = new RedirectParams();
+        redirectParams.setClientId(CLIENT_ID);
+        redirectParams.setRedirectUri(REDIRECT_URI);
+
+        return redirectParams;
     }
 }
