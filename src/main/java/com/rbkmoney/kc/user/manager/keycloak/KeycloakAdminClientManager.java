@@ -21,7 +21,7 @@ public class KeycloakAdminClientManager {
     private final KeycloakAdminClientsProperties props;
 
     public Keycloak getKcClient(String realm) {
-        log.debug("Requesting keycloak admin client for realm {}", realm);
+        log.info("Requesting keycloak admin client for realm {}", realm);
         if (!props.getAdminClients().containsKey(realm)) {
             throw new IllegalArgumentException("Realm " + realm + " is not defined");
         }

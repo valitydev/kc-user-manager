@@ -31,7 +31,7 @@ public class KeycloakUserManagerService implements KeycloakUserManagerSrv.Iface 
 
     @Override
     public CreateUserResponse create(User user) throws TException {
-        log.debug("Create user {} in keycloak", user);
+        log.info("Create user {} in keycloak", user);
         Keycloak adminClient = keycloakAdminClientManager.getKcClient(user.getUserId().getRealm());
         adminClient.tokenManager().getAccessToken();
         Response response = adminClient
@@ -49,7 +49,7 @@ public class KeycloakUserManagerService implements KeycloakUserManagerSrv.Iface 
         String keycloakUserId = response.getLocation().toString();
         SuccessfulUserCreation userCreation = new SuccessfulUserCreation(keycloakUserId);
 
-        log.debug("Created user {} in keycloak with id {}", user.getUserId(), keycloakUserId);
+        log.info("Created user {} in keycloak with id {}", user.getUserId(), keycloakUserId);
         return new CreateUserResponse(Status.success(userCreation));
     }
 
@@ -65,7 +65,7 @@ public class KeycloakUserManagerService implements KeycloakUserManagerSrv.Iface 
 
     private void executeActionsEmail(EmailSendingRequest emailRequest, UserActions action)
             throws KeycloakUserManagerException {
-        log.debug("Execute user email action {}. EmailRequest {}", action, emailRequest);
+        log.info("Execute user email action {}. EmailRequest {}", action, emailRequest);
         Keycloak adminClient = keycloakAdminClientManager.getKcClient(emailRequest.getUserId().getRealm());
         adminClient.tokenManager().getAccessToken();
         RealmResource realmResource = adminClient.realm(emailRequest.getUserId().getRealm());
@@ -84,7 +84,7 @@ public class KeycloakUserManagerService implements KeycloakUserManagerSrv.Iface 
                                 : null,
                         Collections.singletonList(action.name())
                 );
-        log.debug("Action {} executed for user {}", action, emailRequest.getUserId());
+        log.info("Action {} executed for user {}", action, emailRequest.getUserId());
     }
 
     /**

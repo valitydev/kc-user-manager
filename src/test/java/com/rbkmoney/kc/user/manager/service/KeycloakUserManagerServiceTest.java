@@ -31,6 +31,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static com.rbkmoney.kc.user.manager.util.Constants.CLIENT_ID;
+import static com.rbkmoney.kc.user.manager.util.Constants.CREATED_USER_RESOURCE;
+import static com.rbkmoney.kc.user.manager.util.Constants.EMAIL;
+import static com.rbkmoney.kc.user.manager.util.Constants.FIRST_NAME;
+import static com.rbkmoney.kc.user.manager.util.Constants.LAST_NAME;
+import static com.rbkmoney.kc.user.manager.util.Constants.REALM;
+import static com.rbkmoney.kc.user.manager.util.Constants.REDIRECT_URI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,14 +68,6 @@ class KeycloakUserManagerServiceTest {
     private UserResource userResource;
 
     private KeycloakUserManagerService service;
-
-    private static final String EMAIL = "email";
-    private static final String REALM = "realm";
-    private static final String FIRST_NAME = "first_name";
-    private static final String LAST_NAME = "last_name";
-    private static final String CREATED_USER_RESOURCE = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-    private static final String CLIENT_ID = "client_id";
-    private static final String REDIRECT_URI = "redirect_uri";
 
     @BeforeEach
     void setUp() {

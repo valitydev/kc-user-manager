@@ -5,15 +5,14 @@ import com.rbkmoney.kc_user_manager.UserID;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.idm.UserRepresentation;
 
+import static com.rbkmoney.kc.user.manager.util.Constants.EMAIL;
+import static com.rbkmoney.kc.user.manager.util.Constants.FIRST_NAME;
+import static com.rbkmoney.kc.user.manager.util.Constants.LAST_NAME;
+import static com.rbkmoney.kc.user.manager.util.Constants.REALM;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserRepresentationMapperTest {
-
-    private static final String EMAIL = "email";
-    private static final String REALM = "realm";
-    private static final String FIRST_NAME = "first_name";
-    private static final String LAST_NAME = "last_name";
 
     @Test
     void map() {
