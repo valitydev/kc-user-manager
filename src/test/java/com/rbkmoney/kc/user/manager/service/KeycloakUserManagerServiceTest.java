@@ -103,15 +103,6 @@ class KeycloakUserManagerServiceTest {
 
     @Test
     void sendUpdatePasswordEmail() throws TException {
-        EmailSendingRequest rq = new EmailSendingRequest();
-        UserID userID = new UserID();
-        userID.setEmail(EMAIL);
-        userID.setRealm(REALM);
-
-        RedirectParams redirectParams = new RedirectParams();
-        redirectParams.setClientId(CLIENT_ID);
-        redirectParams.setRedirectUri(REDIRECT_URI);
-
         mockAdminClientAndToken();
         mockRealmAndUsersResource();
 
@@ -142,11 +133,15 @@ class KeycloakUserManagerServiceTest {
 
         when(usersResource.get(user.getId())).thenReturn(userResource);
 
-        ArgumentCaptor<String> clientIdCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> redirectURICaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<List<String>> actionsCaptor = ArgumentCaptor.forClass(List.class);
-
+        UserID userID = new UserID();
+        userID.setEmail(EMAIL);
+        userID.setRealm(REALM);
+        RedirectParams redirectParams = new RedirectParams();
+        redirectParams.setClientId(CLIENT_ID);
+        redirectParams.setRedirectUri(REDIRECT_URI);
+        EmailSendingRequest rq = new EmailSendingRequest();
         rq.setUserId(userID);
+
         assertThrows(KeycloakUserManagerException.class, () -> service.sendUpdatePasswordEmail(rq));
         assertThrows(KeycloakUserManagerException.class, () -> service.sendUpdatePasswordEmail(rq));
         service.sendUpdatePasswordEmail(rq);
@@ -165,16 +160,21 @@ class KeycloakUserManagerServiceTest {
                 );
         verify(usersResource, times(2))
                 .get(user.getId());
+
+        ArgumentCaptor<String> clientIdCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> redirectUriCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<List<String>> actionsCaptor = ArgumentCaptor.forClass(List.class);
+
         verify(userResource, times(2))
-                .executeActionsEmail(clientIdCaptor.capture(), redirectURICaptor.capture(), actionsCaptor.capture());
+                .executeActionsEmail(clientIdCaptor.capture(), redirectUriCaptor.capture(), actionsCaptor.capture());
 
         assertEquals(2, clientIdCaptor.getAllValues().size());
         assertNull(clientIdCaptor.getAllValues().get(0));
         assertEquals(CLIENT_ID, clientIdCaptor.getAllValues().get(1));
 
-        assertEquals(2, redirectURICaptor.getAllValues().size());
-        assertNull(redirectURICaptor.getAllValues().get(0));
-        assertEquals(REDIRECT_URI, redirectURICaptor.getAllValues().get(1));
+        assertEquals(2, redirectUriCaptor.getAllValues().size());
+        assertNull(redirectUriCaptor.getAllValues().get(0));
+        assertEquals(REDIRECT_URI, redirectUriCaptor.getAllValues().get(1));
 
         assertEquals(2, actionsCaptor.getAllValues().size());
         actionsCaptor.getAllValues().forEach(actions -> {
@@ -185,15 +185,6 @@ class KeycloakUserManagerServiceTest {
 
     @Test
     void sendVerifyUserEmail() throws TException {
-        EmailSendingRequest rq = new EmailSendingRequest();
-        UserID userID = new UserID();
-        userID.setEmail(EMAIL);
-        userID.setRealm(REALM);
-
-        RedirectParams redirectParams = new RedirectParams();
-        redirectParams.setClientId(CLIENT_ID);
-        redirectParams.setRedirectUri(REDIRECT_URI);
-
         mockAdminClientAndToken();
         mockRealmAndUsersResource();
 
@@ -224,11 +215,16 @@ class KeycloakUserManagerServiceTest {
 
         when(usersResource.get(user.getId())).thenReturn(userResource);
 
-        ArgumentCaptor<String> clientIdCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> redirectURICaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<List<String>> actionsCaptor = ArgumentCaptor.forClass(List.class);
+        UserID userID = new UserID();
+        userID.setEmail(EMAIL);
+        userID.setRealm(REALM);
 
+        RedirectParams redirectParams = new RedirectParams();
+        redirectParams.setClientId(CLIENT_ID);
+        redirectParams.setRedirectUri(REDIRECT_URI);
+        EmailSendingRequest rq = new EmailSendingRequest();
         rq.setUserId(userID);
+
         assertThrows(KeycloakUserManagerException.class, () -> service.sendVerifyUserEmail(rq));
         assertThrows(KeycloakUserManagerException.class, () -> service.sendVerifyUserEmail(rq));
         service.sendVerifyUserEmail(rq);
@@ -247,16 +243,21 @@ class KeycloakUserManagerServiceTest {
                 );
         verify(usersResource, times(2))
                 .get(user.getId());
+
+        ArgumentCaptor<String> clientIdCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> redirectUriCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<List<String>> actionsCaptor = ArgumentCaptor.forClass(List.class);
+
         verify(userResource, times(2))
-                .executeActionsEmail(clientIdCaptor.capture(), redirectURICaptor.capture(), actionsCaptor.capture());
+                .executeActionsEmail(clientIdCaptor.capture(), redirectUriCaptor.capture(), actionsCaptor.capture());
 
         assertEquals(2, clientIdCaptor.getAllValues().size());
         assertNull(clientIdCaptor.getAllValues().get(0));
         assertEquals(CLIENT_ID, clientIdCaptor.getAllValues().get(1));
 
-        assertEquals(2, redirectURICaptor.getAllValues().size());
-        assertNull(redirectURICaptor.getAllValues().get(0));
-        assertEquals(REDIRECT_URI, redirectURICaptor.getAllValues().get(1));
+        assertEquals(2, redirectUriCaptor.getAllValues().size());
+        assertNull(redirectUriCaptor.getAllValues().get(0));
+        assertEquals(REDIRECT_URI, redirectUriCaptor.getAllValues().get(1));
 
         assertEquals(2, actionsCaptor.getAllValues().size());
         actionsCaptor.getAllValues().forEach(actions -> {
