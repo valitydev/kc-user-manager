@@ -20,8 +20,8 @@ public class KeycloakAdminClientsProperties {
     @Setter
     public static class AdminClientProperties {
         private String clientId;
-        private String username;
-        private String password;
+        private String clientSecret;
+        private Long timeoutMs;
         private Integer poolSize;
     }
 }

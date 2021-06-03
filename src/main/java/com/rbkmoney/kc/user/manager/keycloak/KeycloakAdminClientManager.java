@@ -10,6 +10,7 @@ import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,14 +41,14 @@ public class KeycloakAdminClientManager {
         KeycloakAdminClientsProperties.AdminClientProperties adminClientProperties = props.getAdminClients().get(realm);
         return KeycloakBuilder.builder()
                 .serverUrl(props.getAuthServerUrl())
-                .grantType(OAuth2Constants.PASSWORD)
                 .realm(realm)
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .clientId(adminClientProperties.getClientId())
-                .username(adminClientProperties.getUsername())
-                .password(adminClientProperties.getPassword())
+                .clientSecret(adminClientProperties.getClientSecret())
                 .resteasyClient(
                         new ResteasyClientBuilder()
                                 .connectionPoolSize(adminClientProperties.getPoolSize())
+                                .connectTimeout(adminClientProperties.getTimeoutMs(), TimeUnit.MILLISECONDS)
                                 .build()
                 ).build();
     }
