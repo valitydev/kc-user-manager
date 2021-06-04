@@ -38,13 +38,8 @@ info:
 keycloak:
   auth-server-url: http://localhost:8080/auth
   admin-clients:
-    master:
-      client-id: admin-cli
-      username: admin
-      password: admin
-      pool-size: 2
     TESTING:
-      client-id: user-service
-      username: actions-user
-      password: 123
-      pool-size: 2
+      client-id: user-manager-service
+      client-secret: 4f213624-7190-421f-9e3c-5198737a7d9c
+      pool-size: 3
+      timeout-ms: 10000
